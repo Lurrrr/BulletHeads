@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class BigPlayer : Character 
 {
-    // Start is called before the first frame update
-    void Start()
+    new
+        // Start is called before the first frame update
+        void Start()
     {
         base.Start();
         //设置角色属性
@@ -19,6 +20,7 @@ public class BigPlayer : Character
 
     }
 
+    new
     // Update is called once per frame
     void Update()
     {

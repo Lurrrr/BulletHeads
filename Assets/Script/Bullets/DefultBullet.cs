@@ -5,6 +5,7 @@ using UnityEngine;
 public class DefultBullet : Bullet
 {
     // Start is called before the first frame update
+    new
     void Start()
     {
         base.Start();
@@ -13,6 +14,7 @@ public class DefultBullet : Bullet
 
     }
 
+    new
     // Update is called once per frame
     void Update()
     {

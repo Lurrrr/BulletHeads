@@ -5,6 +5,7 @@ using UnityEngine;
 public class SmallPlayer : Character
 {
     // Start is called before the first frame update
+    new
     void Start()
     {
         base.Start();
@@ -19,6 +20,7 @@ public class SmallPlayer : Character
 
     }
 
+    new
     // Update is called once per frame
     void Update()
     {
