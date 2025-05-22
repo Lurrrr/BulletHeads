@@ -113,20 +113,11 @@ public class CharacterPickSceneManager : MonoBehaviourPunCallbacks
     }
 
 
-    private void OnClickLeftButton()
+    public void OnClickStart()
     {
-
-        if (CurrentIndext > 0)
+        if(PhotonNetwork.IsMasterClient)
         {
-            CurrentIndext -= 1;
-        }
-    }
-
-    private void OnClickRightButton()
-    {
-        if (CurrentIndext == 0)
-        {
-            CurrentIndext += 1;
+            PhotonNetwork.LoadLevel("GameScene");
         }
     }
 

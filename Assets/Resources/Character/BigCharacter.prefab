@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: -8785231939633249129}
   - component: {fileID: 8752492043638961407}
   m_Layer: 0
-  m_Name: BigPlayer
+  m_Name: BigCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,6 +208,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   HorizontalInput: 0
   isGrounded: 0
+  PV: {fileID: 0}
 --- !u!114 &9142198120256885712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +229,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -686954986406299800}
+  - {fileID: 8752492043638961407}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -245,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!95 &-8785231939633249129
 Animator:

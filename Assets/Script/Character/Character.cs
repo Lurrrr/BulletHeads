@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
 public class Character : MonoBehaviour
 {
@@ -76,7 +77,7 @@ public class Character : MonoBehaviour
     {
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
         {
-            Instantiate(Bullet, FirePosition.position, FirePosition.rotation);
+            PhotonNetwork.Instantiate("Bullet/DefualtBullet", FirePosition.position, FirePosition.rotation);
             nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
         

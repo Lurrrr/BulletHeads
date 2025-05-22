@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Bullet : MonoBehaviour
 {
@@ -30,6 +31,6 @@ public class Bullet : MonoBehaviour
     IEnumerator IEDead()
     {
         yield return new WaitForSeconds(4f);
-        Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 }
