@@ -102,6 +102,8 @@ public class RoomSceneManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("CharacterPickScene");
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
+        
+
     }
 
 }
