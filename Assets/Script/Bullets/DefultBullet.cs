@@ -27,10 +27,15 @@ public class DefultBullet : Bullet
     {
         if(collision.tag == "Enemy")
         {
-            worm wormscript = collision.GetComponent<worm>();
-            Bomb bombscript = collision.GetComponent<Bomb>();
-            Missile missilescript = collision.GetComponent<Missile>();
-            normal normalscript = collision.GetComponent<normal>();
+            worm wormscript = collision?.GetComponent<worm>();
+            Bomb bombscript = collision?.GetComponent<Bomb>();
+            Missile missilescript = collision?.GetComponent<Missile>();
+            normal normalscript = collision?.GetComponent<normal>();
+
+            if(wormscript!= null)
+            {
+                //扣血
+            }
         }
     }
 }
