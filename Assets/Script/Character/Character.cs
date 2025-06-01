@@ -25,7 +25,10 @@ public class Character : MonoBehaviour
     [SerializeField] protected float HorizontalInput;
     [SerializeField] protected bool isGrounded;
 
-
+    [Header("变量")]
+    public bool invulnerable;//是否受伤
+    public float invulnerableDuration;//无敌时间
+    public float invulnerableCounter;//计时器
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -44,6 +47,15 @@ public class Character : MonoBehaviour
         Flip();
         //开火逻辑
         Fire(FireRate);
+
+        if (invulnerable)
+        {
+            invulnerableCounter -= Time.deltaTime;
+            if (invulnerableCounter <= 0)
+            {
+                invulnerable = false;
+            }
+        }
     }
 
     protected void Jump()
@@ -81,6 +93,32 @@ public class Character : MonoBehaviour
             nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
         
+    }
+
+    public void TakeDamage(Attack attack)
+    {
+        if (invulnerable == true)
+            return;
+        if (HP - attack.damage <= 0)
+        {
+            HP -= attack.damage; //当前血量减去收到的伤害
+            TriggerInvulnerable();
+        }
+        else
+        {
+            HP = 0;
+            //触发死亡
+
+        }
+    }
+
+    public void TriggerInvulnerable()
+    {
+        if (!invulnerable)
+        {
+            invulnerable = true;
+            invulnerableCounter = invulnerableDuration;
+        }
     }
 
 }

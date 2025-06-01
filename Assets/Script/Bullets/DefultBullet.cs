@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DefultBullet : Bullet
 {
+
     // Start is called before the first frame update
     new
     void Start()
@@ -19,5 +20,17 @@ public class DefultBullet : Bullet
     void Update()
     {
         move(Speed);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Enemy")
+        {
+            worm wormscript = collision.GetComponent<worm>();
+            Bomb bombscript = collision.GetComponent<Bomb>();
+            Missile missilescript = collision.GetComponent<Missile>();
+            normal normalscript = collision.GetComponent<normal>();
+        }
     }
 }

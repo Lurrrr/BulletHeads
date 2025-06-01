@@ -17,7 +17,6 @@ public class Bullet : MonoBehaviour
         {
             StartCoroutine("IEDead");
         }
-
     }
 
     // Update is called once per frame
