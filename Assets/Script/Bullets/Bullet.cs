@@ -7,11 +7,16 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] protected float Speed;
+    PhotonView pv;
     // Start is called before the first frame update
     protected void Start()
     {
+        pv = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody2D>();
-        StartCoroutine("IEDead");
+        if(pv.IsMine)
+        {
+            StartCoroutine("IEDead");
+        }
 
     }
 
