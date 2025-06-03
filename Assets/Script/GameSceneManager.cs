@@ -99,4 +99,10 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
 
     }
+
+
+    private void SpawnEnemy()
+    {
+
+    }
 }

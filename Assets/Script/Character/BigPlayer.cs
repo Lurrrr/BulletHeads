@@ -1,22 +1,27 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Animations;
 using UnityEngine;
 
 public class BigPlayer : Character 
 {
     public PhotonView PV;
+
     new
         // Start is called before the first frame update
         void Start()
     {
+        //获取组件
         PV = GetComponent<PhotonView>();
+        animator = GetComponent<Animator>();
+        
         base.Start();
         //设置角色属性
         HP = 100f;
         MaxHP = 100f;
         JumpForce = 5f;
-        MoveSpeed = 6f;
+        MoveSpeed = 3f;
         FireRate = 0.5f;
 
         FirePosition = transform.Find("FirePosition").transform;
@@ -36,7 +41,7 @@ public class BigPlayer : Character
         if(PV.IsMine)
         {
             //移动逻辑
-            Movement();
+            Movement(animator);
             Flip();
             //开火逻辑
             Fire(FireRate);

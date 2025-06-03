@@ -112,7 +112,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: -350378116, guid: 9b925b34bda3f5740ab0bd44e2089eb1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -182,8 +182,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Offset: {x: 0, y: 0.053543568}
+  m_Size: {x: 1, y: 1}
   m_Direction: 0
 --- !u!114 &8801761597187290811
 MonoBehaviour:
@@ -208,6 +208,10 @@ MonoBehaviour:
   rb: {fileID: 0}
   HorizontalInput: 0
   isGrounded: 0
+  animator: {fileID: 0}
+  invulnerable: 0
+  invulnerableDuration: 0
+  invulnerableCounter: 0
   PV: {fileID: 0}
 --- !u!114 &-4173836933059190704
 MonoBehaviour:
@@ -259,7 +263,7 @@ Animator:
   m_GameObject: {fileID: 8892625771999086495}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bc4fe6214413ef24fbe14d92831cbc73, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -285,4 +289,6 @@ MonoBehaviour:
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
   m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class DefultBullet : Bullet
 {
-
+    public float damage = 10f;
     // Start is called before the first frame update
     new
     void Start()
     {
         base.Start();
         //设置子弹参数
-        Speed = 3f;
+        Speed = 4f;
 
     }
 
@@ -27,14 +27,11 @@ public class DefultBullet : Bullet
     {
         if(collision.tag == "Enemy")
         {
-            worm wormscript = collision?.GetComponent<worm>();
-            Bomb bombscript = collision?.GetComponent<Bomb>();
-            Missile missilescript = collision?.GetComponent<Missile>();
-            normal normalscript = collision?.GetComponent<normal>();
+            EnemyCharacter enemycharacter = collision.GetComponent<EnemyCharacter>();
 
-            if(wormscript!= null)
+            if(enemycharacter != null)
             {
-                //扣血
+                enemycharacter.TakeDamage(damage);
             }
         }
     }

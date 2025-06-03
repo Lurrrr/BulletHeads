@@ -12,7 +12,7 @@ public class CharacterPickSceneManager : MonoBehaviourPunCallbacks
 {
     private PhotonView PV;
     [SerializeField] List<string> CharacterList = new List<string> { "BigPlayer", "SmallPlayer" };
-    [SerializeField] int CurrentIndext = 0;
+    //[SerializeField] int CurrentIndext = 0;
     public Button StartButton;
 
     // Start is called before the first frame update

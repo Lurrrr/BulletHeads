@@ -24,6 +24,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] protected float HorizontalInput;
     [SerializeField] protected bool isGrounded;
+    [SerializeField] protected Animator animator;
 
     [Header("变量")]
     public bool invulnerable;//是否受伤
@@ -42,8 +43,6 @@ public class Character : MonoBehaviour
         {
             Jump();
         }
-        //移动逻辑
-        Movement();
         Flip();
         //开火逻辑
         Fire(FireRate);
@@ -66,10 +65,29 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void Movement()
+    protected void Movement(Animator anim)
     {
         HorizontalInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(MoveSpeed * HorizontalInput, rb.velocity.y);
+        if (HorizontalInput > 0)
+        {
+            rb.transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), rb.transform.localScale.y, rb.transform.localScale.z);
+        }
+        if (HorizontalInput < 0)
+        {
+            rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), rb.transform.localScale.y, rb.transform.localScale.z);
+        }
+            
+
+        if (HorizontalInput == 0)
+        {
+            anim.SetBool("walk", false);
+        }
+        else
+        {
+            anim.SetBool("walk", true);
+        }
+
     }
 
     protected void Flip()
@@ -95,13 +113,13 @@ public class Character : MonoBehaviour
         
     }
 
-    public void TakeDamage(Attack attack)
+    public void TakeDamage(float damage)
     {
         if (invulnerable == true)
             return;
-        if (HP - attack.damage <= 0)
+        if (HP - damage <= 0)
         {
-            HP -= attack.damage; //当前血量减去收到的伤害
+            HP -= damage; //当前血量减去收到的伤害
             TriggerInvulnerable();
         }
         else

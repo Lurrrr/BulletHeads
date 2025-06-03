@@ -11,12 +11,13 @@ public class SmallPlayer : Character
     void Start()
     {
         PV = GetComponent<PhotonView>();
+        animator = GetComponent<Animator>();
         base.Start();
         //设置角色属性
         HP = 40f;
         MaxHP = 40f;
-        JumpForce = 8f;
-        MoveSpeed = 10f;
+        JumpForce = 4f;
+        MoveSpeed = 6f;
         FireRate = 1f;
 
         FirePosition = transform.Find("FirePosition").transform;
@@ -35,9 +36,11 @@ public class SmallPlayer : Character
     {
         if(PV.IsMine)
         {
-            base.Update();
+            Movement(animator);
+            Flip();
             //开火逻辑
             Fire(FireRate);
+            Jump();
         }
 
     }
