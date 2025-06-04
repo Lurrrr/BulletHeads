@@ -21,10 +21,14 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             PV.RPC("StartCount", RpcTarget.All);
-
+            GameObject spawnpoint = transform.Find("ZigZagEnemySpawnPosition").GetComponent<GameObject>();
+            PhotonNetwork.Instantiate("Enemy/ZigZagEnemy/ZigZagEnemy",spawnpoint.transform.position,Quaternion.identity);
+            StartCoroutine("IESpawnEnemy");
         }
         Spawn();
         TimeText = GameObject.Find("Text (TMP)_Time").GetComponent<TMP_Text>();
+
+
     }
 
 
@@ -101,8 +105,15 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     }
 
 
-    private void SpawnEnemy()
-    {
 
+    IEnumerator IESpawnEnemy()
+    {
+        int i = 8;
+        while(i >= 1)
+        {
+            yield return new WaitForSeconds(0.5f);
+            GameObject spawnpoint = transform.Find("ZigZagEnemySpawnPosition").GetComponent<GameObject>();
+            PhotonNetwork.Instantiate("Enemy/ZigZagEnemy/ZigZagEnemy",spawnpoint.transform.position,Quaternion.identity);
+        }
     }
 }
