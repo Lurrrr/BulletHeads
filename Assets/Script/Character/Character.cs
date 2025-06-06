@@ -16,6 +16,7 @@ public class Character : MonoBehaviour
     [Header("开火属性")]
     [SerializeField] protected float FireRate;
     [SerializeField] protected Transform FirePosition;
+    [SerializeField] protected Transform HorizontalFirePosition;
     [SerializeField] protected GameObject Bullet;
     [SerializeField] protected float nextFireTime;
 
@@ -25,11 +26,13 @@ public class Character : MonoBehaviour
     [SerializeField] protected float HorizontalInput;
     [SerializeField] protected bool isGrounded;
     [SerializeField] protected Animator animator;
+    protected PhotonView PV;
 
     [Header("变量")]
     public bool invulnerable;//是否受伤
     public float invulnerableDuration;//无敌时间
     public float invulnerableCounter;//计时器
+    public bool isattack;
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,29 +68,50 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void Movement(Animator anim)
+    protected void Movement()
     {
         HorizontalInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(MoveSpeed * HorizontalInput, rb.velocity.y);
-        if (HorizontalInput > 0)
+        if (!isattack)
         {
-            rb.transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), rb.transform.localScale.y, rb.transform.localScale.z);
-        }
-        if (HorizontalInput < 0)
-        {
-            rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), rb.transform.localScale.y, rb.transform.localScale.z);
-        }
-            
+            if (HorizontalInput > 0)
+            {
+                rb.transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), rb.transform.localScale.y, rb.transform.localScale.z);
+            }
+            if (HorizontalInput < 0)
+            {
+                rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), rb.transform.localScale.y, rb.transform.localScale.z);
+            }
 
-        if (HorizontalInput == 0)
-        {
-            anim.SetBool("walk", false);
-        }
-        else
-        {
-            anim.SetBool("walk", true);
-        }
 
+            if (HorizontalInput == 0)
+            {
+                if (AnimatorHasParameter(animator,"walk"))
+                {
+                    animator.SetBool("walk", false);
+                }
+            }
+            else
+            {
+                if(AnimatorHasParameter(animator, "walk"))
+                {
+                    animator.SetBool("walk", true);
+                }
+                    
+            }
+        }
+        
+
+    }
+
+    protected bool AnimatorHasParameter(Animator animator, string paramName)
+    {
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.name == paramName)
+                return true;
+        }
+        return false;
     }
 
     protected void Flip()
@@ -105,28 +129,70 @@ public class Character : MonoBehaviour
 
     protected void Fire(float FireRate)
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
+        if (Input.GetButton("Fire1") && Time.time >= nextFireTime && transform.localScale.x > 0)
         {
-            PhotonNetwork.Instantiate("Bullet/DefualtBullet", FirePosition.position, FirePosition.rotation);
+            StartCoroutine("leftattack");
             nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
-        
+        if (Input.GetButton("Fire1") && Time.time >= nextFireTime && transform.localScale.x <= 0)
+        {
+            StartCoroutine("rightattack");
+            nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
+        }
+        if (Input.GetMouseButton(1) && Time.time >= nextFireTime)
+        {
+            Debug.Log("向上攻击");
+            StartCoroutine("upattack");
+            nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
+        }
     }
 
+    IEnumerator upattack()
+    {
+        isattack = true;
+        animator.SetBool("upattack", true);
+        yield return new WaitForSeconds(0.4f);
+        PhotonNetwork.Instantiate("Bullet/UpDefualtBullet", FirePosition.position, Quaternion.identity);
+        animator.SetBool("upattack", false);
+        isattack = false;
+    }
+
+    IEnumerator leftattack()
+    {
+        isattack = true;
+        animator.SetBool("attack", true);
+        yield return new WaitForSeconds(0.4f);
+        PhotonNetwork.Instantiate("Bullet/LeftBullet", HorizontalFirePosition.position, HorizontalFirePosition.rotation);
+        animator.SetBool("attack", false);
+        isattack = false;
+    }
+    IEnumerator rightattack()
+    {
+        isattack = true;
+        animator.SetBool("attack", true);
+        yield return new WaitForSeconds(0.4f);
+        PhotonNetwork.Instantiate("Bullet/RightBullet", HorizontalFirePosition.position, HorizontalFirePosition.rotation);
+        animator.SetBool("attack", false);
+        isattack = false;
+    }
     public void TakeDamage(float damage)
     {
+        /*
         if (invulnerable == true)
             return;
-        if (HP - damage <= 0)
+        */
+        if (HP - damage >= 0)
         {
             HP -= damage; //当前血量减去收到的伤害
             TriggerInvulnerable();
+            //Debug.Log($"现在的血量：{HP}");
         }
         else
         {
             HP = 0;
             //触发死亡
-
+            //Debug.Log($"现在的血量：{HP},死了");
+            dead();
         }
     }
 
@@ -139,4 +205,18 @@ public class Character : MonoBehaviour
         }
     }
 
+    protected void dead()
+    {
+        StartCoroutine("IEdead");
+    }
+
+    IEnumerator IEdead() 
+    {
+        animator.SetBool("dead", true);
+        yield return new WaitForSeconds(0.4f);
+        if(PV.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
 }

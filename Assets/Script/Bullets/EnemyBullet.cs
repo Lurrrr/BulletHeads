@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class EnemyBullet : Bullet
 {
@@ -20,7 +21,7 @@ public class EnemyBullet : Bullet
     // Update is called once per frame
     void Update()
     {
-        move(Speed);
+        moveup(-Speed);
     }
 
 
@@ -34,11 +35,19 @@ public class EnemyBullet : Bullet
 
             if (bigcharacter != null)
             {
-                bigcharacter.TakeDamage(damage);
+                if (bigcharacter.gameObject.GetComponent<PhotonView>().IsMine)
+                {
+                    bigcharacter.TakeDamage(damage);
+                    Destroyself();
+                }
             }
-            if(smallplayer!=null)
+            if (smallplayer != null)
             {
-                smallplayer.TakeDamage(damage);
+                if (smallplayer.gameObject.GetComponent<PhotonView>().IsMine)
+                {
+                    smallplayer.TakeDamage(damage);
+                    Destroyself();
+                }
             }
         }
     }

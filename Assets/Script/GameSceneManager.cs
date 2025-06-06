@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
 using TMPro;
+using HashTable = ExitGames.Client.Photon.Hashtable;
+using Unity.VisualScripting;
+using ExitGames.Client.Photon.Encryption;
 
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
@@ -11,22 +14,28 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     private PhotonView PV;
     public GameObject BigCharacterSpawnPosition;
     public GameObject SmallCharacterSpawnPosition;
-    public float TimeRemain = 90f;
+    public float TimeRemain = 5f;
+    public GameObject spawnpoint;
     Coroutine coro;
-    TMP_Text TimeText;
+    [SerializeField] TMP_Text TimeText;
+    public GameObject gameoverpanel;
+    public TMP_Text gamoverstatus;
     // Start is called before the first frame update
     void Start()
     {
+        //关闭胜利页面
+        gameoverpanel.SetActive(false);
+
+        //获取必要组件
         PV = GetComponent<PhotonView>();
+        Spawn();
         if (PhotonNetwork.IsMasterClient)
         {
             PV.RPC("StartCount", RpcTarget.All);
-            GameObject spawnpoint = transform.Find("ZigZagEnemySpawnPosition").GetComponent<GameObject>();
-            PhotonNetwork.Instantiate("Enemy/ZigZagEnemy/ZigZagEnemy",spawnpoint.transform.position,Quaternion.identity);
-            StartCoroutine("IESpawnEnemy");
+            //StartCoroutine("IESpawnEnemy");
         }
-        Spawn();
-        TimeText = GameObject.Find("Text (TMP)_Time").GetComponent<TMP_Text>();
+
+
 
 
     }
@@ -46,13 +55,14 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     IEnumerator GameCount()
     {
-        while(TimeRemain>0.1f)
+        while (TimeRemain > 0.1f)
         {
             yield return new WaitForSeconds(1f);
             TimeRemain -= 1;
             TimeText.text = TimeRemain.ToString();
         }
-        
+        win();
+
     }
 
     private void Spawn()
@@ -104,16 +114,92 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     }
 
+    [PunRPC]
+    private void PunWin()
+    {
+        print("Win");
+        //关闭时间
+        Time.timeScale = 0;
+        //暂停动画
+        Animator[] animators = FindObjectsOfType<Animator>();
+        foreach (var animator in animators)
+        {
+            animator.enabled = false;
+        }
+        //暂停物理计算
+        Physics.autoSimulation = false;
+
+        gameoverpanel.SetActive(true);
+        gamoverstatus.text = "Win";
+
+
+    }
+
+    private void win()
+    {
+        Debug.Log("胜利");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("主机执行到这");
+            PV.RPC("PunWin", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    private void GameOver()
+    {
+        print("GameEnd");
+        //关闭时间
+        Time.timeScale = 0;
+        //暂停动画
+        Animator[] animators = FindObjectsOfType<Animator>();
+        foreach (var animator in animators)
+        {
+            animator.enabled = false;
+        }
+        //暂停物理计算
+        Physics.autoSimulation = false;
+
+        gameoverpanel.SetActive(true);
+        gamoverstatus.text = "Lose";
+    }
+
+    public void OnClickBack()
+    {
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.LoadLevel("StartScene");
+    }
 
 
     IEnumerator IESpawnEnemy()
     {
         int i = 8;
-        while(i >= 1)
+        while (i >= 1)
         {
             yield return new WaitForSeconds(0.5f);
-            GameObject spawnpoint = transform.Find("ZigZagEnemySpawnPosition").GetComponent<GameObject>();
-            PhotonNetwork.Instantiate("Enemy/ZigZagEnemy/ZigZagEnemy",spawnpoint.transform.position,Quaternion.identity);
+            PhotonNetwork.Instantiate("Enemy/ZigZagEnemy/ZigZagEnemy", spawnpoint.transform.position, Quaternion.identity);
+            i -= 1;
+        }
+    }
+
+
+    public override void OnRoomPropertiesUpdate(HashTable propertiesThatChanged)
+    {
+        //两个角色都死了
+        if (propertiesThatChanged.ContainsKey("BigCharacterdead") || propertiesThatChanged.ContainsKey("SmallCharacterdead"))
+        {
+            HashTable currentRoom = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (currentRoom.ContainsKey("BigCharacterdead") && currentRoom.ContainsKey("SmallCharacterdead"))
+            {
+                if ((bool)currentRoom["BigCharacterdead"] == true && (bool)currentRoom["SmallCharacterdead"] == true)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        //输了
+                        PV.RPC("GameOver", RpcTarget.All);
+                    }
+                }
+            }
         }
     }
 }

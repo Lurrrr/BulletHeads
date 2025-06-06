@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviourPunCallbacks
 {
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] protected float Speed;
@@ -26,15 +26,29 @@ public class Bullet : MonoBehaviour
     }
 
 
-    protected void move(float Speed)
+    protected void moveup(float Speed)
     {
         rb.velocity = new Vector2(0,Speed);
     }
-    
 
-    IEnumerator IEDead()
+    protected void move(float Speed)
+    {
+        rb.velocity = new Vector2(Speed, 0);
+    }
+
+
+   protected IEnumerator IEDead()
     {
         yield return new WaitForSeconds(4f);
         PhotonNetwork.Destroy(gameObject);
+    }
+
+    protected void Destroyself()
+    {
+        if (PhotonNetwork.IsMasterClient&& pv.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+
     }
 }

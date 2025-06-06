@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BigPlayer : Character 
 {
-    public PhotonView PV;
+
 
     new
         // Start is called before the first frame update
@@ -25,6 +25,8 @@ public class BigPlayer : Character
         FireRate = 0.5f;
 
         FirePosition = transform.Find("FirePosition").transform;
+        HorizontalFirePosition = transform.Find("HorizontalFirePosition").transform;
+
 
         //删除其他玩家在本地的rigidbody
         if (!PV.IsMine)
@@ -41,7 +43,7 @@ public class BigPlayer : Character
         if(PV.IsMine)
         {
             //移动逻辑
-            Movement(animator);
+            Movement();
             Flip();
             //开火逻辑
             Fire(FireRate);

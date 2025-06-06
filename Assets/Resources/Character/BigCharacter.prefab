@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2727593225688538220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1573582100830939625}
+  m_Layer: 0
+  m_Name: HorizontalFirePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1573582100830939625
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2727593225688538220}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.61, y: 0.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4985262876930019011}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &7947087733553012904
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,9 +97,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -6.46, z: 0}
   m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6855261824565216522}
+  - {fileID: 1573582100830939625}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7408179912507530832
@@ -168,6 +200,7 @@ MonoBehaviour:
   MoveSpeed: 0
   FireRate: 0
   FirePosition: {fileID: 0}
+  HorizontalFirePosition: {fileID: 0}
   Bullet: {fileID: 7963680718254524832, guid: 14cb75901741c7144af5fbb26c9eacff, type: 3}
   nextFireTime: 0
   rb: {fileID: 0}
@@ -177,7 +210,7 @@ MonoBehaviour:
   invulnerable: 0
   invulnerableDuration: 0
   invulnerableCounter: 0
-  PV: {fileID: 0}
+  isattack: 0
 --- !u!114 &9142198120256885712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,7 +288,7 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: walk
   - Type: 4
     SynchronizeType: 0
@@ -305,7 +338,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.94, y: 0.66}
+    oldSize: {x: 1.175, y: 0.825}
     newSize: {x: 0.94, y: 0.66}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

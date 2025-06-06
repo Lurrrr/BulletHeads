@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 698237428134657182}
   m_Layer: 0
-  m_Name: FirePosition
+  m_Name: HorizontalFirePosition
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -203,6 +203,7 @@ MonoBehaviour:
   MoveSpeed: 0
   FireRate: 0
   FirePosition: {fileID: 0}
+  HorizontalFirePosition: {fileID: 0}
   Bullet: {fileID: 7963680718254524832, guid: 14cb75901741c7144af5fbb26c9eacff, type: 3}
   nextFireTime: 0
   rb: {fileID: 0}
@@ -212,7 +213,7 @@ MonoBehaviour:
   invulnerable: 0
   invulnerableDuration: 0
   invulnerableCounter: 0
-  PV: {fileID: 0}
+  isattack: 0
 --- !u!114 &-4173836933059190704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +289,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: attack
+  - Type: 4
+    SynchronizeType: 0
+    Name: dead
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

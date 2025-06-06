@@ -12,12 +12,11 @@ GameObject:
   - component: {fileID: 465090364709495071}
   - component: {fileID: 8258049610941277367}
   - component: {fileID: 1937237092573258935}
-  - component: {fileID: 5209597568303691110}
   - component: {fileID: 3588068998433858153}
   - component: {fileID: 7213645187945197568}
-  - component: {fileID: -6088639968014229901}
+  - component: {fileID: 3130297739025195195}
   m_Layer: 0
-  m_Name: DefualtBullet
+  m_Name: RightBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,13 +30,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7963680718254524832}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.70687824, w: 0.7073353}
   m_LocalPosition: {x: -4.48253, y: -2.135608, z: 0}
   m_LocalScale: {x: 0.1434375, y: 0.416875, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -89.963}
 --- !u!212 &465090364709495071
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -162,21 +161,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5209597568303691110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7963680718254524832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 167fc2e99a634fb4ab82ae0a4d9e11cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  Speed: 0
-  damage: 10
 --- !u!114 &3588068998433858153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +200,7 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-6088639968014229901
+--- !u!114 &3130297739025195195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -225,9 +209,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7963680718254524832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fc67ba30a1be7644920601bfc7c950e, type: 3}
+  m_Script: {fileID: 11500000, guid: d0d249683d6d4204f954623b753e4bad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  Speed: 0
   damage: 10
-  attackRange: 0
-  damageRate: 0

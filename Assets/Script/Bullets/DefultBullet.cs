@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class DefultBullet : Bullet
     // Update is called once per frame
     void Update()
     {
-        move(Speed);
+        moveup(Speed);
     }
 
 
@@ -32,6 +33,7 @@ public class DefultBullet : Bullet
             if(enemycharacter != null)
             {
                 enemycharacter.TakeDamage(damage);
+                Destroyself();
             }
         }
     }

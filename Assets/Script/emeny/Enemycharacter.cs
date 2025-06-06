@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class EnemyCharacter : MonoBehaviour
+public class EnemyCharacter : MonoBehaviourPunCallbacks
 {
     
     
@@ -17,45 +18,51 @@ public class EnemyCharacter : MonoBehaviour
     public float invulnerableCounter;//计时器
     
     public bool invulnerable;//是否受伤
-    private void Start()
+
+    [Header("参数")]
+    public Transform FirePosition;
+    public float nextFireTime;
+    public float FireRate = 0.5f;
+
+    protected void Start()
     {
         currentHealth = maxHealth;
     }
 
-    private void Update()
+    protected void Update()
     {
-        if (invulnerable)
-        {
-            invulnerableCounter -= Time.deltaTime;
-            if (invulnerableCounter <= 0)
-            {
-                invulnerable = false;
-            }
-        }
+       
     }
     public void TakeDamage(float damage)
     {
-        if (invulnerable == true)
-            return;
-        if(currentHealth - damage<=0)
+        if (currentHealth - damage >= 0)
         {
             currentHealth = currentHealth - damage; //当前血量减去收到的伤害
-            TriggerInvulnerable();
         }
         else
         {
             currentHealth = 0;
             //触发死亡
-            
+            dead();
+
+
         }
     }
 
-    public void TriggerInvulnerable()
+    protected void dead()
     {
-        if (!invulnerable)
+        if(PhotonNetwork.IsMasterClient)
         {
-            invulnerable = true;
-            invulnerableCounter = invulnerableDuration;
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
+
+    protected void Fire()
+    {
+        if (Time.time >= nextFireTime)
+        {
+            PhotonNetwork.Instantiate("Bullet/EnemyBullet", FirePosition.position, FirePosition.rotation);
+            nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class ZigZagEnemy : EnemyCharacter
 {
@@ -10,7 +11,7 @@ public class ZigZagEnemy : EnemyCharacter
     [SerializeField] private float horizontalSpeed = 4f;  // 较快的水平速度
 
     [Tooltip("垂直下落速度")]
-    [SerializeField] private float verticalSpeed = 1f;    // 较慢的垂直速度
+    [SerializeField] private float verticalSpeed = 0.5f;    // 较慢的垂直速度
 
     [Tooltip("Z字形移动的宽度")]
     [SerializeField] private float zigzagWidth = 3f;
@@ -21,6 +22,9 @@ public class ZigZagEnemy : EnemyCharacter
     [Header("Gizmos")]
     [SerializeField] private bool showDebugPath = true;
 
+
+    [SerializeField] private float damage = 10;
+
     private float timer;
     private bool movingRight = true;
     private Vector2 startPosition;
@@ -29,13 +33,17 @@ public class ZigZagEnemy : EnemyCharacter
     void Start()
     {
         startPosition = transform.position;
+
     }
 
     void Update()
     {
         FlipSprite();
-
+        //获得开枪点
+        FirePosition = transform.Find("FirePosition");
+        Fire();
         timer += Time.deltaTime;
+
 
         // 独立控制水平和垂直速度
         Vector2 movement = Vector2.zero;
@@ -85,5 +93,26 @@ public class ZigZagEnemy : EnemyCharacter
         Vector3 newScale = transform.localScale;
         newScale.x = movingRight ? -Mathf.Abs(newScale.x) : Mathf.Abs(newScale.x);
         transform.localScale = newScale;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.name == "Player")
+        {
+            Character bigcharacter = collision.GetComponent<BigPlayer>();
+            Character smallplayer = collision.GetComponent<SmallPlayer>();
+
+
+            if (bigcharacter != null)
+            {
+                bigcharacter.TakeDamage(damage);
+
+            }
+            if (smallplayer != null)
+            {
+                smallplayer.TakeDamage(damage);
+
+            }
+        }
     }
 }

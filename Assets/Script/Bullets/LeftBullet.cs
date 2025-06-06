@@ -1,0 +1,41 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Photon.Pun;
+
+public class LeftBullet : Bullet
+{
+    public float damage = 10f;
+    // Start is called before the first frame update
+    new
+    void Start()
+    {
+        base.Start();
+        //设置子弹参数
+        Speed = 4f;
+
+    }
+
+    new
+    // Update is called once per frame
+    void Update()
+    {      
+        move(-Speed);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            EnemyCharacter enemycharacter = collision.GetComponent<EnemyCharacter>();
+
+            if (enemycharacter != null)
+            {
+                enemycharacter.TakeDamage(damage);
+                Destroyself();
+
+            }
+        }
+    }
+}
