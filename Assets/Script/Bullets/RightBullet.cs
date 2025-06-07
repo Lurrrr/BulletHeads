@@ -12,7 +12,7 @@ public class RightBullet : Bullet
     {
         base.Start();
         //设置子弹参数
-        Speed = 4f;
+
 
     }
 

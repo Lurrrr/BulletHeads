@@ -22,7 +22,7 @@ public class BigPlayer : Character
         MaxHP = 100f;
         JumpForce = 5f;
         MoveSpeed = 3f;
-        FireRate = 0.5f;
+        FireRate = 1.5f;
 
         FirePosition = transform.Find("FirePosition").transform;
         HorizontalFirePosition = transform.Find("HorizontalFirePosition").transform;
@@ -46,7 +46,7 @@ public class BigPlayer : Character
             Movement();
             Flip();
             //开火逻辑
-            Fire(FireRate);
+            Fire(FireRate,this.gameObject);
         }
     }
 

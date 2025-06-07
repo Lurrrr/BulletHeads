@@ -9,12 +9,12 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     
     [Header("属性")]
-    [SerializeField] protected float HP;
+    [SerializeField] public float HP;
     [SerializeField] protected float MaxHP;
     [SerializeField] protected float JumpForce;
     [SerializeField] protected float MoveSpeed;
     [Header("开火属性")]
-    [SerializeField] protected float FireRate;
+    [SerializeField] public float FireRate;
     [SerializeField] protected Transform FirePosition;
     [SerializeField] protected Transform HorizontalFirePosition;
     [SerializeField] protected GameObject Bullet;
@@ -48,7 +48,7 @@ public class Character : MonoBehaviour
         }
         Flip();
         //开火逻辑
-        Fire(FireRate);
+        Fire(FireRate,gameObject);
 
         if (invulnerable)
         {
@@ -127,27 +127,49 @@ public class Character : MonoBehaviour
     }
 
 
-    protected void Fire(float FireRate)
+    protected void Fire(float FireRate, GameObject owner)
     {
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime && transform.localScale.x > 0)
         {
-            StartCoroutine("leftattack");
+            Debug.Log(owner.name);
+            if(owner.name == "BigCharacter(Clone)")
+            {
+                StartCoroutine("Leftattack");
+            }
+            if(owner.name == "SmallCharacter(Clone)")
+            {
+                StartCoroutine("Leftattack_Small");
+            }
             nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime && transform.localScale.x <= 0)
         {
-            StartCoroutine("rightattack");
+            if (owner.name == "BigCharacter(Clone)")
+            {
+                StartCoroutine("Rightattack");
+            }
+            if (owner.name == "SmallCharacter(Clone)")
+            {
+                StartCoroutine("Rightattack_Small");
+            }
             nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
         if (Input.GetMouseButton(1) && Time.time >= nextFireTime)
         {
-            Debug.Log("向上攻击");
-            StartCoroutine("upattack");
+            //Debug.Log("向上攻击");
+            if (owner.name == "BigCharacter(Clone)")
+            {
+                StartCoroutine("Upattack");
+            }
+            if (owner.name == "SmallCharacter(Clone)")
+            {
+                StartCoroutine("Upattack_Small");
+            }
             nextFireTime = Time.time + 1f / FireRate; // 计算下次可射击时间
         }
     }
 
-    IEnumerator upattack()
+    IEnumerator Upattack()
     {
         isattack = true;
         animator.SetBool("upattack", true);
@@ -157,7 +179,7 @@ public class Character : MonoBehaviour
         isattack = false;
     }
 
-    IEnumerator leftattack()
+    IEnumerator Leftattack()
     {
         isattack = true;
         animator.SetBool("attack", true);
@@ -166,7 +188,7 @@ public class Character : MonoBehaviour
         animator.SetBool("attack", false);
         isattack = false;
     }
-    IEnumerator rightattack()
+    IEnumerator Rightattack()
     {
         isattack = true;
         animator.SetBool("attack", true);
@@ -175,6 +197,38 @@ public class Character : MonoBehaviour
         animator.SetBool("attack", false);
         isattack = false;
     }
+
+
+    IEnumerator Upattack_Small()
+    {
+        isattack = true;
+        animator.SetBool("upattack", true);
+        yield return new WaitForSeconds(0.4f);
+        PhotonNetwork.Instantiate("Bullet/UpDefualtBullet_Small", FirePosition.position, Quaternion.identity);
+        animator.SetBool("upattack", false);
+        isattack = false;
+    }
+
+    IEnumerator Leftattack_Small()
+    {
+        isattack = true;
+        animator.SetBool("attack", true);
+        yield return new WaitForSeconds(0.4f);
+        PhotonNetwork.Instantiate("Bullet/LeftBullet_Small", HorizontalFirePosition.position, HorizontalFirePosition.rotation);
+        animator.SetBool("attack", false);
+        isattack = false;
+    }
+
+    IEnumerator Rightattack_Small()
+    {
+        isattack = true;
+        animator.SetBool("attack", true);
+        yield return new WaitForSeconds(0.4f);
+        PhotonNetwork.Instantiate("Bullet/RightBullet_Small", HorizontalFirePosition.position, HorizontalFirePosition.rotation);
+        animator.SetBool("attack", false);
+        isattack = false;
+    }
+
     public void TakeDamage(float damage)
     {
         /*

@@ -12,13 +12,14 @@ public class SmallPlayer : Character
         PV = GetComponent<PhotonView>();
         animator = GetComponent<Animator>();
         HorizontalFirePosition = transform.Find("HorizontalFirePosition");
+        FirePosition = transform.Find("UpFirePosition");
         base.Start();
         //设置角色属性
         HP = 40f;
         MaxHP = 40f;
         JumpForce = 4f;
         MoveSpeed = 6f;
-        FireRate = 1f;
+        FireRate = 3f;
 
         //删除其他玩家在本地的rigidbody
         if(!PV.IsMine)
@@ -37,7 +38,7 @@ public class SmallPlayer : Character
             Movement();
             Flip();
             //开火逻辑
-            Fire(FireRate);
+            Fire(FireRate,this.gameObject);
             Jump();
         }
 

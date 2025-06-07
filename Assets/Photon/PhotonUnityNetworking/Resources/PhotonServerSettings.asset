@@ -47,6 +47,13 @@ MonoBehaviour:
   - PunWin
   - EnemyDied
   - SyncPosition
+  - ClearAllItems
+  - ManualSpawnItem
+  - OnItemPickedUp
+  - Function
+  - Throw
+  - ChangeParameter
+  - PRCStrengthen
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
