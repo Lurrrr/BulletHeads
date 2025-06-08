@@ -7,6 +7,7 @@ using TMPro;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using Unity.VisualScripting;
 using ExitGames.Client.Photon.Encryption;
+using UnityEngine.UI;
 
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
@@ -20,23 +21,41 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_Text TimeText;
     public GameObject gameoverpanel;
     public TMP_Text gamoverstatus;
+
+    public TMP_Text player1name;
+    public TMP_Text player2name;
+
+    Player master;
+    Player client;
+
+    public string mastercharacter;
+    public string clientcharacter;
+
+    Slider masterSlider;
+    Slider clientSlider;
+
+
     // Start is called before the first frame update
     void Start()
     {
         //关闭胜利页面
         gameoverpanel.SetActive(false);
 
+
         //获取必要组件
         PV = GetComponent<PhotonView>();
+        masterSlider = GameObject.Find("血条_P1").GetComponent<Slider>();
+        clientSlider = GameObject.Find("血条_P1 (1)").GetComponent<Slider>();
+
         Spawn();
+
         if (PhotonNetwork.IsMasterClient)
         {
             PV.RPC("StartCount", RpcTarget.All);
             //StartCoroutine("IESpawnEnemy");
         }
 
-
-
+        //SetName();
 
     }
 
@@ -44,7 +63,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-
+        //SetUI();
     }
 
     [PunRPC]
@@ -65,6 +84,75 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     }
 
+    private void SetName()
+    {
+        player1name = GameObject.Find("Text (TMP)_Master").GetComponent<TMP_Text>();
+
+        player2name = GameObject.Find("Text (TMP)_Client").GetComponent<TMP_Text>();
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            HashTable currentroom = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (player.IsMasterClient)
+            {
+                master = player;
+                player1name.text = master.NickName.ToString();
+                mastercharacter = currentroom[$"{master.NickName}Character"].ToString() + "(Clone)";
+            }
+            else
+            {
+                client = player;
+                player2name.text = client.NickName.ToString();
+                clientcharacter = currentroom[$"{client.NickName}Character"].ToString() + "(Clone)";
+
+            }
+        }
+
+
+    }
+
+    private void SetUI()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (!player.IsMasterClient)
+            {
+                //设置非主机玩家血条
+                GameObject playerobject = (GameObject)player.TagObject;
+                if (playerobject?.GetComponent<BigPlayer>() != null)
+                {
+                    clientSlider.value = playerobject.GetComponent<BigPlayer>().HP;
+                }
+                else if (playerobject?.GetComponent<SmallPlayer>() != null)
+                {
+                    clientSlider.value = playerobject.GetComponent<SmallPlayer>().HP;
+                }
+            }
+            else
+            {
+                //设置主机玩家血条
+                GameObject playerobject = (GameObject)player.TagObject;
+
+                if (playerobject?.GetComponent<BigPlayer>() != null)
+                {
+                    masterSlider.value = playerobject.GetComponent<BigPlayer>().HP;
+                }
+                else if (playerobject?.GetComponent<SmallPlayer>() != null)
+                {
+                    masterSlider.value = playerobject.GetComponent<SmallPlayer>().HP;
+                }
+            }
+        }
+    }
+
+    private void UpdateUI()
+    {
+        if (mastercharacter == "BigCharacter")
+        {
+
+        }
+    }
+
     private void Spawn()
     {
 
@@ -81,7 +169,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
             }
             if (character == "SmallCharacter")
             {
-                PhotonNetwork.Instantiate($"Character/{character}", SmallCharacterSpawnPosition.transform.position, Quaternion.identity);
+                PhotonNetwork.MasterClient.TagObject = PhotonNetwork.Instantiate($"Character/{character}", SmallCharacterSpawnPosition.transform.position, Quaternion.identity);
             }
 
         }
@@ -97,18 +185,21 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
                     p2 = player;
                     Debug.Log(p2);
 
+                    string character = PhotonNetwork.CurrentRoom.CustomProperties[$"{p2.NickName}Character"].ToString();
+                    if (character == "BigCharacter")
+                    {
+
+                        player.TagObject = PhotonNetwork.Instantiate($"Character/{character}", BigCharacterSpawnPosition.transform.position, Quaternion.identity);
+                    }
+                    if (character == "SmallCharacter")
+                    {
+                        player.TagObject = PhotonNetwork.Instantiate($"Character/{character}", SmallCharacterSpawnPosition.transform.position, Quaternion.identity);
+                    }
+
                 }
             }
 
-            string character = PhotonNetwork.CurrentRoom.CustomProperties[$"{p2.NickName}Character"].ToString();
-            if (character == "BigCharacter")
-            {
-                PhotonNetwork.Instantiate($"Character/{character}", BigCharacterSpawnPosition.transform.position, Quaternion.identity);
-            }
-            if (character == "SmallCharacter")
-            {
-                PhotonNetwork.Instantiate($"Character/{character}", SmallCharacterSpawnPosition.transform.position, Quaternion.identity);
-            }
+
         }
 
 
