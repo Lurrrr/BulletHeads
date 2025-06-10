@@ -44,8 +44,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
         //获取必要组件
         PV = GetComponent<PhotonView>();
-        masterSlider = GameObject.Find("血条_P1").GetComponent<Slider>();
-        clientSlider = GameObject.Find("血条_P1 (1)").GetComponent<Slider>();
+        //masterSlider = GameObject.Find("血条_P1").GetComponent<Slider>();
+        // = GameObject.Find("血条_P1 (1)").GetComponent<Slider>();
 
         Spawn();
 
